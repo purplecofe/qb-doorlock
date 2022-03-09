@@ -192,7 +192,7 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 	local Player = QBCore.Functions.GetPlayer(src)
 	if not Player then return end
 	local configData = {}
-	local jobs, gangs, cids, items, doorType, identifier
+	local jobs, gangs, cids, items, doorType
 	if data.job then configData.authorizedJobs = { [data.job] = 0 } jobs = "['"..data.job.."'] = 0" end
 	if data.gang then configData.authorizedGangs = { [data.gang] = 0 } gangs = "['"..data.gang.."'] = 0" end
 	if data.cid then configData.authorizedCitizenIDs = { [data.cid] = true } cids = "['"..data.cid.."'] = true" end
@@ -206,7 +206,6 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 	configData.doorRate = 1.0
 	configData.doorLabel = data.doorlabel
 	doorType = "'"..data.doortype.."'"
-	identifier = data.configfile..'-'..data.dooridentifier
 	if doubleDoor then
 		configData.doors = {
 			{objName = data.model[1], objYaw = data.heading[1], objCoords = data.coords[1]},
@@ -234,7 +233,7 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 	end
 
 	local file = io.open(path, 'a+')
-	local label = "\n\n-- "..data.dooridentifier.." ".. Lang:t("general.created_by") .." "..Player.PlayerData.name.."\nConfig.DoorList['"..identifier.."'] = {"
+	local label = "\n\n-- "..data.dooridentifier.." ".. Lang:t("general.created_by") .." "..Player.PlayerData.name.."\nConfig.DoorList['"..data.dooridentifier.."'] = {"
 	file:write(label)
 	for k, v in pairs(configData) do
 		if k == 'authorizedJobs' or k == 'authorizedGangs' or k == 'authorizedCitizenIDs' or k == 'items' then
@@ -269,8 +268,8 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 	file:write("\n}")
 	file:close()
 
-	Config.DoorList[identifier] = configData
-	TriggerClientEvent('qb-doorlock:client:newDoorAdded', -1, configData, identifier, src)
+	Config.DoorList[data.dooridentifier] = configData
+	TriggerClientEvent('qb-doorlock:client:newDoorAdded', -1, configData, data.dooridentifier, src)
 end)
 
 -- Commands
