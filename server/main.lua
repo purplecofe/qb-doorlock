@@ -192,18 +192,21 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 	local Player = QBCore.Functions.GetPlayer(src)
 	if not Player then return end
 	local configData = {}
-	local jobs, gangs, cids, items, doorType
+	local jobs, gangs, cids, items, doorType, identifier
 	if data.job then configData.authorizedJobs = { [data.job] = 0 } jobs = "['"..data.job.."'] = 0" end
 	if data.gang then configData.authorizedGangs = { [data.gang] = 0 } gangs = "['"..data.gang.."'] = 0" end
 	if data.cid then configData.authorizedCitizenIDs = { [data.cid] = true } cids = "['"..data.cid.."'] = true" end
 	if data.item then configData.items = { [data.item] = 1 } items = "['"..data.item.."'] = 1" end
 	configData.locked = data.locked
 	configData.pickable = data.pickable
+	configData.cantUnlock = data.cantunlock
+	configData.hideLabel = data.hidelabel
 	configData.distance = data.distance
 	configData.doorType = data.doortype
 	configData.doorRate = 1.0
-	configData.audioRemote = false
+	configData.doorLabel = data.doorlabel
 	doorType = "'"..data.doortype.."'"
+	identifier = data.configfile..'-'..data.dooridentifier
 	if doubleDoor then
 		configData.doors = {
 			{objName = data.model[1], objYaw = data.heading[1], objCoords = data.coords[1]},
@@ -231,7 +234,7 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 	end
 
 	local file = io.open(path, 'a+')
-	local label = "\n\n-- "..data.doorname.." ".. Lang:t("general.created_by") .." "..Player.PlayerData.name.."\nConfig.DoorList['"..data.doorname.."'] = {"
+	local label = "\n\n-- "..data.dooridentifier.." ".. Lang:t("general.created_by") .." "..Player.PlayerData.name.."\nConfig.DoorList['"..identifier.."'] = {"
 	file:write(label)
 	for k, v in pairs(configData) do
 		if k == 'authorizedJobs' or k == 'authorizedGangs' or k == 'authorizedCitizenIDs' or k == 'items' then
@@ -255,20 +258,27 @@ RegisterNetEvent('qb-doorlock:server:saveNewDoor', function(data, doubleDoor)
 		elseif k == 'doorType' then
 			local str = ("\n    %s = %s,"):format(k, doorType)
 			file:write(str)
+		elseif k == 'doorLabel' then
+			local str = ("\n    %s = '%s',"):format(k, v)
+			file:write(str)
 		else
 			local str = ("\n    %s = %s,"):format(k, v)
 			file:write(str)
 		end
 	end
-	file:write("\n    --audioLock = {[\'file\'] = \'metal-locker.ogg\', [\'volume\'] = 0.6},\n    --audioUnlock = {[\'file\'] = \'metallic-creak.ogg\', [\'volume\'] = 0.7},\n    --autoLock = 1000,\n}")
+	file:write("\n}")
 	file:close()
 
-	Config.DoorList[data.doorname] = configData
-	TriggerClientEvent('qb-doorlock:client:newDoorAdded', -1, configData, data.doorname)
+	Config.DoorList[identifier] = configData
+	TriggerClientEvent('qb-doorlock:client:newDoorAdded', -1, configData, identifier, src)
 end)
 
 -- Commands
 
 QBCore.Commands.Add('newdoor', Lang:t("general.newdoor_command_description"), {}, false, function(source)
 	TriggerClientEvent('qb-doorlock:client:addNewDoor', source)
+end, Config.CommandPermission)
+
+QBCore.Commands.Add('doordebug', Lang:t("general.doordebug_command_description"), {}, false, function(source)
+	TriggerClientEvent('qb-doorlock:client:ToggleDoorDebug', source)
 end, Config.CommandPermission)
