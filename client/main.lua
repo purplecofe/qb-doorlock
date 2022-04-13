@@ -181,6 +181,7 @@ local function doorAnim()
 end
 
 local function updateDoors(specificDoor)
+	if #(playerCoords - lastCoords) > 30 then Wait(1000) end
     playerCoords = GetEntityCoords(playerPed)
     for doorID, data in pairs(Config.DoorList) do
         if not specificDoor or doorID == specificDoor then
@@ -188,6 +189,7 @@ local function updateDoors(specificDoor)
 				if not data.doorType then data.doorType = 'double' end
                 for k, v in pairs(data.doors) do
                     if #(playerCoords - v.objCoords) < 30 then
+
 						if data.doorType == "doublesliding" then
 							v.object = GetClosestObjectOfType(v.objCoords.x, v.objCoords.y, v.objCoords.z, 5.0, v.objName or v.objHash, false, false, false)
 						else
@@ -218,7 +220,7 @@ local function updateDoors(specificDoor)
                                 end
                             end
                         end
-                    elseif v.object and v.object ~= 0 then
+                    elseif v.object then
 						RemoveDoorFromSystem(v.doorHash)
 						nearbyDoors[doorID] = nil
 					end
@@ -257,7 +259,7 @@ local function updateDoors(specificDoor)
                             end
                         end
                     end
-                elseif data.object and data.object ~= 0 then
+                elseif data.object then
 					RemoveDoorFromSystem(data.doorHash)
 					nearbyDoors[doorID] = nil
 				end
@@ -370,6 +372,14 @@ local function isAuthorized(door)
 	end
 
 	return false
+end
+
+function SetupDoors()
+	local p = promise.new()
+	QBCore.Functions.TriggerCallback('qb-doorlock:server:setupDoors', function(result)
+		p:resolve(result)
+	end)
+	Config.DoorList = Citizen.Await(p)
 end
 
 -- Events
@@ -723,7 +733,6 @@ RegisterNetEvent('qb-doorlock:client:ToggleDoorDebug', function()
 	handleDoorDebug()
 end)
 
-RegisterNetEvent('qb-doorlock:client:UpdateDoors', function() updateDoors() end)
 -- Commands
 
 RegisterCommand('toggledoorlock', function()
@@ -794,6 +803,8 @@ RegisterKeyMapping('remotetriggerdoor', Lang:t("general.keymapping_remotetrigger
 -- Threads
 
 CreateThread(function()
+	if Config.PersistentDoorStates and isLoggedIn then Wait(1000) SetupDoors() end -- Required for pulling in door states properly from live ensures
+
 	updateDoors()
 	handleDoorDebug()
 	while true do
