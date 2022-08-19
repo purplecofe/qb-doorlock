@@ -71,12 +71,13 @@ local function raycastWeapon()
     local num = math.abs(math.cos(direction.x))
     direction = vec3((-math.sin(direction.y) * num), (math.cos(direction.y) * num), math.sin(direction.x))
     local destination = vec3(offset.x + direction.x * 30, offset.y + direction.y * 30, offset.z + direction.z * 30)
-    local rayHandle, result, hit, _, _, entityHit = StartShapeTestLosProbe(offset, destination, -1, playerPed, 0)
+	local hit, entityHit, result
+    local rayHandle = StartShapeTestLosProbe(offset, destination, -1, playerPed, 0)
     repeat
         result, hit, _, _, entityHit = GetShapeTestResult(rayHandle)
         Wait(0)
     until result ~= 1
-    if GetEntityType(entityHit) == 3 then return hit, entityHit else return false end
+    if GetEntityType(entityHit) == 3 then return hit, entityHit else return false, 0 end
 end
 
 local function setTextCoords(data)
@@ -193,7 +194,7 @@ local function updateDoors(specificDoor)
 						if data.doorType == "doublesliding" then
 							v.object = GetClosestObjectOfType(v.objCoords.x, v.objCoords.y, v.objCoords.z, 5.0, v.objName or v.objHash, false, false, false)
 						else
-                        	v.object = GetClosestObjectOfType(v.objCoords.x, v.objCoords.y, v.objCoords.z, 1.0, v.objName or v.objHash, false, false, false)
+							v.object = GetClosestObjectOfType(v.objCoords.x, v.objCoords.y, v.objCoords.z, 1.0, v.objName or v.objHash, false, false, false)
 						end
                         if v.object and v.object ~= 0 then
                             v.doorHash = 'door_'..doorID..'_'..k
@@ -311,8 +312,8 @@ local function lockpickFinish(success)
 		local count = 0
 		while GetIsTaskActive(playerPed, 225) do
 			Wait(10)
-			count += 1
 			if count == 150 then break end
+			count += 1
 		end
 		Wait(1800)
 		TriggerServerEvent('qb-doorlock:server:updateState', closestDoor.id, false, false, true, false) -- Broadcast new state of the door to everyone
@@ -320,10 +321,10 @@ local function lockpickFinish(success)
 		QBCore.Functions.Notify(Lang:t("error.lockpick_fail"), 'error', 2500)
 		if math.random(1,100) <= 17 then
 			if usingAdvanced then
-				TriggerServerEvent("QBCore:Server:RemoveItem", "advancedlockpick", 1, false)
+				TriggerServerEvent("qb-doorlock:server:removeLockpick", "advancedlockpick")
 				TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["advancedlockpick"], "remove")
 			else
-				TriggerServerEvent("QBCore:Server:RemoveItem", "lockpick", 1, false)
+				TriggerServerEvent("qb-doorlock:server:removeLockpick", "lockpick")
 				TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["lockpick"], "remove")
 			end
 		end
@@ -607,7 +608,8 @@ RegisterNetEvent('qb-doorlock:client:addNewDoor', function()
 			type = "setText",
 			aim = "block"
 		})
-		local entity, coords, heading, model, result, entityHit = 0, 0, 0, 0, false, 0
+		local heading, result, entityHit
+		local entity, coords, model= 0, 0, 0
 		while true do
 			if IsPlayerFreeAiming(PlayerId()) then
 				result, entityHit = raycastWeapon()
@@ -656,7 +658,8 @@ RegisterNetEvent('qb-doorlock:client:addNewDoor', function()
 		TriggerServerEvent('qb-doorlock:server:saveNewDoor', doorData, false)
 		canContinue = true
 	else
-		local entity, coords, heading, model, result, entityHit = {0, 0}, {0, 0}, {0, 0}, {0, 0}, false, 0
+		local result, entityHit
+		local entity, coords, heading, model = {0, 0}, {0, 0}, {0, 0}, {0, 0}
 		for i = 1, 2 do
 			SendNUIMessage({
 				type = "setText",
@@ -742,15 +745,13 @@ RegisterCommand('toggledoorlock', function()
 	local veh = GetVehiclePedIsIn(playerPed)
 	if veh then
 		CreateThread(function()
-			local counter = 0
 			local siren = IsVehicleSirenOn(veh)
-			repeat
+			for _ = 0, 100 do
 				DisableControlAction(0, 86, true)
 				SetHornEnabled(veh, false)
 				if not siren then SetVehicleSiren(veh, false) end
-				counter += 1
 				Wait(0)
-			until counter == 100
+			end
 			SetHornEnabled(veh, true)
 		end)
 	end
@@ -758,7 +759,7 @@ RegisterCommand('toggledoorlock', function()
 	local src = false
 	if closestDoor.data.audioRemote then src = NetworkGetNetworkIdFromEntity(playerPed) end
 	TriggerServerEvent('qb-doorlock:server:updateState', closestDoor.id, locked, src, false, false, true, true) -- Broadcast new state of the door to everyone
-end)
+end, false)
 TriggerEvent("chat:removeSuggestion", "/toggledoorlock")
 RegisterKeyMapping('toggledoorlock', Lang:t("general.keymapping_description"), 'keyboard', 'E')
 
@@ -787,16 +788,14 @@ RegisterCommand('remotetriggerdoor', function()
 	local veh = GetVehiclePedIsIn(playerPed)
 	if veh then
 		CreateThread(function()
-			local counter = 0
-			repeat
+			for _ = 0, 100 do
 				DisableControlAction(0, 74, true)
-				counter += 1
 				Wait(0)
-			until counter == 100
+			end
 		end)
 	end
 	TriggerServerEvent('qb-doorlock:server:updateState', nearestDoor.id, not nearestDoor.data.locked, NetworkGetNetworkIdFromEntity(playerPed), false, false, true, true) -- Broadcast new state of the door to everyone
-end)
+end, false)
 TriggerEvent("chat:removeSuggestion", "/remotetriggerdoor")
 RegisterKeyMapping('remotetriggerdoor', Lang:t("general.keymapping_remotetriggerdoor"), 'keyboard', 'H')
 
@@ -859,7 +858,7 @@ CreateThread(function()
 									displayText = Lang:t("general.locked_button")
 								end
 							end
-							if displayText ~= "" then displayNUIText(displayText) end
+							if displayText ~= "" and (closestDoor.data.hideLabel == nil or not closestDoor.data.hideLabel) then displayNUIText(displayText) end
 						else
 							hideNUI()
 							break

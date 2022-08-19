@@ -239,7 +239,7 @@ Config.DoorList = {
 -- 	{
 -- 		objName = 'v_ilev_arm_secdoor',
 -- 		objYaw = -90.0,
--- 		objCoords  = vec3(452.6, -982.7, 30.6), 
+		objCoords  = vec3(452.6, -982.7, 30.6),
 -- 		textCoords = vec3(452.95, -982.16, 30.99),
 -- 		authorizedJobs = { ['police'] = 0, ['bcso'] = 0, ['sasp'] = 0, ['saspr'] = 0 },
 -- 		locked = true,
