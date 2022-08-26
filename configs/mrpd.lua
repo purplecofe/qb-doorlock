@@ -151,6 +151,7 @@ table.insert(Config.DoorList, {
 	audioRemote = true,
 	maxDistance = 6,
 	remoteTrigger = true,
+	doorRate = 3.0,  -- The rate of the animation to lock/unlock the door
 	authorizedJobs = {
 		['police'] = 0,
 		['offpolice'] = 0,

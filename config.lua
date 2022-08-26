@@ -3,7 +3,7 @@ Config = {}
 Config.CommandPermission = 'god' -- permission level for creating new doors
 Config.AdminAccess = true -- Enable admins to unlock any door
 Config.AdminPermission = 'god' -- The permission needed to get AdminAccess if it is enabled
-Config.Warnings = false -- if true it will show warnings in the console when certain requirements aren't met
+Config.Warnings = true -- if true it will show warnings in the console when certain requirements aren't met
 Config.FallbackDistance = 3.0 -- Distance to fall back on when it is not set
 Config.EnableSounds = true -- Enable sounds when unlocking/locking doors (doors triggered by scripts can have the sound manually disabled)
 Config.EnableAnimation = true -- Enable the animation when unlocking/locking doors (doors triggered by scripts can have the animation manually disabled)
@@ -239,7 +239,7 @@ Config.DoorList = {
 -- 	{
 -- 		objName = 'v_ilev_arm_secdoor',
 -- 		objYaw = -90.0,
-		objCoords  = vec3(452.6, -982.7, 30.6),
+-- 		objCoords  = vec3(452.6, -982.7, 30.6), 
 -- 		textCoords = vec3(452.95, -982.16, 30.99),
 -- 		authorizedJobs = { ['police'] = 0, ['bcso'] = 0, ['sasp'] = 0, ['saspr'] = 0 },
 -- 		locked = true,

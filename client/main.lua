@@ -106,22 +106,22 @@ local function loadAnimDict(dict)
 end
 
 local function handleDoorDebug()
-	exports['qb-core']:HideText()
+	exports['ps-ui']:HideText()
 	if not Config.DoorDebug then return end
 	CreateThread(function()
 		while Config.DoorDebug do
 			if closestDoor.data then
 				if closestDoor.data.doors then
-					exports['qb-core']:DrawText(('<p style="font-size:20px">Door Debug</p><br>Door ID: %s<br>Door Label: %s<br>Door 1 Coords: %s<br>Door 2 Coords: %s<br>Door Locked: %s<br>Door 1 Object Hash: %s<br>Door 2 Object Hash: %s<br>Door 1 Heading: %s<br> Door 2 Heading: %s<br>Door Type: %s'):format(closestDoor.id, closestDoor.data.doorLabel, closestDoor.data.doors[1].objCoords, closestDoor.data.doors[2].objCoords, closestDoor.data.locked, closestDoor.data.doors[1].objHash or closestDoor.data.doors[1].objName, closestDoor.data.doors[2].objHash or closestDoor.data.doors[2].objName, closestDoor.data.doors[1].objYaw or closestDoor.data.doors[1].objHeading, closestDoor.data.doors[2].objYaw or closestDoor.data.doors[2].objHeading, closestDoor.data.doorType), 'right')
+					exports['ps-ui']:DisplayText(('<p style="font-size:20px">Door Debug</p><br>Door ID: %s<br>Door Label: %s<br>Door 1 Coords: %s<br>Door 2 Coords: %s<br>Door Locked: %s<br>Door 1 Object Hash: %s<br>Door 2 Object Hash: %s<br>Door 1 Heading: %s<br> Door 2 Heading: %s<br>Door Type: %s'):format(closestDoor.id, closestDoor.data.doorLabel, closestDoor.data.doors[1].objCoords, closestDoor.data.doors[2].objCoords, closestDoor.data.locked, closestDoor.data.doors[1].objHash or closestDoor.data.doors[1].objName, closestDoor.data.doors[2].objHash or closestDoor.data.doors[2].objName, closestDoor.data.doors[1].objYaw or closestDoor.data.doors[1].objHeading, closestDoor.data.doors[2].objYaw or closestDoor.data.doors[2].objHeading, closestDoor.data.doorType), 'info')
 				else
-					exports['qb-core']:DrawText(('<p style="font-size:20px">Door Debug</p><br>Door ID: %s<br>Door Label: %s<br>Door Coords: %s<br>Door Locked: %s<br>Door Object Hash: %s<br>Door Heading: %s<br>Door Type: %s'):format(closestDoor.id, closestDoor.data.doorLabel, closestDoor.data.objCoords, closestDoor.data.locked, closestDoor.data.objHash or closestDoor.data.objName, closestDoor.data.objYaw or closestDoor.data.objHeading, closestDoor.data.doorType), 'right')
+					exports['ps-ui']:DisplayText(('<p style="font-size:20px">Door Debug</p><br>Door ID: %s<br>Door Label: %s<br>Door Coords: %s<br>Door Locked: %s<br>Door Object Hash: %s<br>Door Heading: %s<br>Door Type: %s'):format(closestDoor.id, closestDoor.data.doorLabel, closestDoor.data.objCoords, closestDoor.data.locked, closestDoor.data.objHash or closestDoor.data.objName, closestDoor.data.objYaw or closestDoor.data.objHeading, closestDoor.data.doorType), 'info')
 				end
 			else
-				exports['qb-core']:DrawText('<p style="font-size:20px">Door Debug</p><br>No door in interact distance', 'right')
+				exports['ps-ui']:DisplayText('<p style="font-size:20px">Door Debug</p><br>No door in interact distance', 'info')
 			end
 			Wait(0)
 		end
-		exports['qb-core']:HideText()
+		exports['ps-ui']:HideText()
 	end)
 end
 
