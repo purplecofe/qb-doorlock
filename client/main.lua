@@ -491,7 +491,7 @@ end)
 RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
 	if not closestDoor.data or not next(closestDoor.data) or PlayerData.metadata['isdead'] or PlayerData.metadata['ishandcuffed'] or (not closestDoor.data.pickable and not closestDoor.data.lockpick) or not closestDoor.data.locked then return end
 	usingAdvanced = isAdvanced
-	exports["lockpicks"]:OpenHackingGame(math.random(3, 6), math.random(15,20), lockpickFinish)
+	exports['ps-ui']:Circle(lockpickFinish, math.random(3, 6), math.random(10,20))
 end)
 
 RegisterNetEvent('qb-doorlock:client:addNewDoor', function()
