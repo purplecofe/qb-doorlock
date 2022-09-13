@@ -4,7 +4,7 @@
 -- main entry
 table.insert(Config.DoorList, {
 	maxDistance = 2.5,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	locked = false,
 	slides = false,
 	audioRemote = false,
@@ -22,11 +22,11 @@ table.insert(Config.DoorList, {
 -- employees access
 table.insert(Config.DoorList, {
 	objHeading = 89.999977111816,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -41,11 +41,11 @@ table.insert(Config.DoorList, {
 -- kitchen
 table.insert(Config.DoorList, {
 	objHeading = 179.99998474121,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -60,11 +60,11 @@ table.insert(Config.DoorList, {
 -- garage (from kitchen, sliding door)
 table.insert(Config.DoorList, {
 	objHeading = 270.00003051758,
-	locked = false,
+	locked = true,
 	slides = true,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 6.0,
 	fixText = false,
 	audioRemote = false,
@@ -83,8 +83,8 @@ table.insert(Config.DoorList, {
 	garage = false,
 	slides = false,
 	objHeading = 89.999977111816,
-	locked = false,
-	authorizedJobs = { ['unemployed']=0 },
+	locked = true,
+	authorizedJobs = { ['catcafe'] = 0 },
 	lockpick = false,
 	audioRemote = false,
 	maxDistance = 2.0,
@@ -99,11 +99,11 @@ table.insert(Config.DoorList, {
 -- garage (from inside)
 table.insert(Config.DoorList, {
 	objHeading = 0.0,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -118,11 +118,11 @@ table.insert(Config.DoorList, {
 -- garage exit (from inside)
 table.insert(Config.DoorList, {
 	objHeading = 89.999977111816,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -137,11 +137,11 @@ table.insert(Config.DoorList, {
 -- garage exit (large gate from inside)
 table.insert(Config.DoorList, {
 	objHeading = 270.00003051758,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = true,
 	setText = true,
@@ -162,7 +162,7 @@ table.insert(Config.DoorList, {
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -181,7 +181,7 @@ table.insert(Config.DoorList, {
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -196,11 +196,11 @@ table.insert(Config.DoorList, {
 -- entry (upper floor)
 table.insert(Config.DoorList, {
 	objHeading = 0.0,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -215,11 +215,11 @@ table.insert(Config.DoorList, {
 -- office 1 (upper floor)
 table.insert(Config.DoorList, {
 	objHeading = 270.00003051758,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -234,11 +234,11 @@ table.insert(Config.DoorList, {
 -- office 2 (upper floor)
 table.insert(Config.DoorList, {
 	objHeading = 89.999977111816,
-	locked = false,
+	locked = true,
 	slides = false,
 	garage = false,
 	lockpick = false,
-	authorizedJobs = { ['unemployed']=0 },
+	authorizedJobs = { ['catcafe'] = 0 },
 	maxDistance = 2.0,
 	fixText = false,
 	audioRemote = false,
@@ -249,3 +249,16 @@ table.insert(Config.DoorList, {
 	-- audioUnlock = {['file'] = 'metallic-creak.ogg', ['volume'] = 0.7},
 	-- autoLock = 1000
 })
+
+-- catcafe-fire-escape created by KAI
+Config.DoorList['catcafe-fire-escape'] = {
+    distance = 2,
+    objName = 1099436502,
+    objCoords = vec3(-600.888611, -1055.131470, 22.713028),
+    doorRate = 1.0,
+    locked = true,
+    authorizedJobs = { ['catcafe'] = 0 },
+    objYaw = 269.99996948242,
+    doorType = 'door',
+    fixText = false,
+}
